@@ -1,0 +1,16 @@
+body{
+    /* background: url("https://images.unsplash.com/photo-1439396087961-98bc12c21176?dpr=2&fit=crop&fm=jpg&h=825&q=50&w=1450"); */
+    background-size: cover;
+}
+#content {
+    text-align: center;
+    padding-top: 25%;
+}
+
+#start{
+    background-color: #30cf7f;
+}
+
+#start:hover{
+    box-shadow: gray;
+}
