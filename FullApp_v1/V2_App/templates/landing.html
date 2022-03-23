@@ -33,6 +33,7 @@
       href="../stiatic/fonts/fontawesome5-overrides.min.css"
     />
     <link rel=stylesheet type="text/css" href="{{ url_for('static',filename='css/layout.css') }}">
+    <link rel=stylesheet type="text/css" href="{{ url_for('static',filename='css/untitled.css') }}">
     <!-- <link rel="stylesheet" href="assets/css/untitled.css"> -->
   </head>
 
@@ -110,7 +111,7 @@
         <div id="content">
 
           <h3 class="text-dark mb-4" style="padding-left: 21px">Dashboard</h3>
-          <div class="container-fluid">
+          <div class="container">
             <div
               class="d-sm-flex justify-content-between align-items-center mb-4"
             >
@@ -133,7 +134,7 @@
             <!-- <a class="btn btn-default btn-lg" id="start" onclick="changeUploadStat()">Start!</a> -->
 
             <form action="" method="post">
-                <button class="btn btn-primary btn-sm d-none d-sm-inline-block" name="foo" value="Do Something Man!"><i class="fas fa-download fa-sm text-white-50"></i
+                <button class="btn btn-primary btn-sm d-none d-sm-inline-block" name="foo" value="Do Something Man!" id="viz"><i class="fas fa-download fa-sm text-white-50"></i
                     >&nbsp;Visualize</button>
                 
             </form>
@@ -143,7 +144,7 @@
 
 
             </div>
-            <div class="row">
+            <div class="row" style="width:85%;">
               <div class="col-md-6 col-xl-3 mb-4">
                 <div class="card shadow border-start-primary py-2">
                   <div class="card-body">
@@ -233,7 +234,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" style="width:85%;">
               <div class="col-lg-7 col-xl-8" style="width: 100%">
                 <div class="card shadow mb-4">
                   <div
@@ -375,7 +376,7 @@
                     </div>
                   </div>
 
-                  <divclass="card-body">
+                  <div class="card-body" style="width:90%;">
                     <canvas id="myChart"></canvas>
                   </div>
 
@@ -469,12 +470,6 @@
               fill: false,
               borderColor: 'rgb(75, 192, 192)',
               tension: 0.1
-            //   // backgroundColor: 'green',
-            //   backgroundColor:'#2ac7db',
-            //   borderWidth:1,
-            //   borderColor:'white',
-            //   hoverBorderWidth: 3,
-            //   hoverBorderColor: 'black'
             },
             {
               label:'Pred Price',
@@ -483,41 +478,12 @@
               fill: false,
               borderColor: 'rgb(0, 0, 0)',
               tension: 0.1
-            //   // backgroundColor: 'green',
-            //   backgroundColor:'#2ac7db',
-            //   borderWidth:1,
-            //   borderColor:'white',
-            //   hoverBorderWidth: 3,
-            //   hoverBorderColor: 'black'
+
             },
         
         ]
           },
-        //   options:{
-        //     title:{
-        //       display: true,
-        //       text: 'Close vs Time',
-        //       fontSize:25
-        //     },
-        //     legend:{
-        //       display:true,
-        //       position:'right',
-        //       labels:{
-        //         fontColor: '#000'
-        //       }
-        //     },
-        //     layout:{
-        //       padding:{
-        //         left:50,
-        //         right:0,
-        //         bottom:0,
-        //         top:0
-        //       }
-        //     },
-        //     tooltips:{
-        //       enabled:true
-        //     }
-        //   }
+        
         });
        </script>
 

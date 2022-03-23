@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chart.js": "^3.7.1",
+    "chartjs-gauge": "^0.3.0"
+  }
+}
