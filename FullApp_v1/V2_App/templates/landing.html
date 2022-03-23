@@ -14,6 +14,8 @@
       crossorigin="anonymous"
     />
 
+    <script nonce="undefined" src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
     <link
@@ -253,82 +255,7 @@
                         text-align: right;
                       "
                     >
-                      <!-- <button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1d</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1w</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1m</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        3m</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        6m</button
-                      > -->
-                      
                      
-                      <!-- <button
-                        class="btn btn-primary"
-                        type="submit" value="12msss"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        12m
-                      </button> -->
 
                       <form action="" method="post">
                         <button class="btn btn-primary" name="foox" value="1" style="
@@ -380,50 +307,92 @@
                     <canvas id="myChart"></canvas>
                   </div>
 
+                </div>
+              </div>
+            </div>
+            
 
-                  <!-- <div class="card-body">
-                    <div class="chart-area">
-                      <canvas
-                        data-bss-chart='{"type":"line","data":{"labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],"datasets":[{"label":"Earnings","fill":true,"data":["0","10000","5000","15000","10000","20000","15000","25000"],"backgroundColor":"rgba(78, 115, 223, 0.05)","borderColor":"rgba(78, 115, 223, 1)"}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"},"scales":{"xAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"],"drawOnChartArea":false},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}],"yAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"]},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}]}}}'
-                      ></canvas>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div class="row">
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-primary text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-warning text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col" align="center">
-                    <img src="../static/img/Guage.png" />
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-danger text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-secondary text-white shadow"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
+            
           </div>
         </div>
         
       </div>
+
+
+
+
+      <div id='GaugeX'></div>
+    <script>
+      ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+      var myConfig8 = {
+        "type": "gauge",
+        "scale-r": {
+          "aperture": 200,
+          "values": "-100:100:10",
+          "center": {
+            "size": 5,
+            "background-color": "#66CCFF #FFCCFF",
+            "border-color": "none"
+          },
+          "ring": {
+            "size": 10,
+            "rules": [{
+                "rule": "%v >= -100 && %v <= -90",
+                "background-color": "#218A50"
+              },
+              {
+                "rule": "%v >= -90 && %v <= -50",
+                "background-color": "#21B865"
+              },
+              {
+                "rule": "%v >= -50 && %v <= 0",
+                "background-color": "#A2D466"
+              },
+              {
+                "rule": "%v >= 0 && %v <= 50",
+                "background-color": "#F2B450"
+              },
+              {
+                "rule": "%v >= 50 && %v <= 90",
+                "background-color": "#F0880A"
+              },
+              {
+                "rule": "%v >= 90 && %v <= 100",
+                "background-color": "#F01313"
+              }
+            ]
+          },
+          "labels": ["-100","","","","","","","","","","","","","","","","","","","100"], //Scale Labels
+          "item": { //Scale Label Styling
+            "font-color": "purple",
+            "font-family": "Georgia, serif",
+            "font-size": 12,
+            "font-weight": "bold", //or "normal"
+            "font-style": "normal", //or "italic"
+            "offset-r": 0,
+            "angle": "auto"
+          }
+        },
+        "plot": {
+          "csize": "5%",
+          "size": "100%",
+          "background-color": "#000000"
+        },
+        "series": [{
+          "values": [0]//VALUE OF CUSTOM INDEX GOES HERE
+        }]
+      };
+
+      zingchart.render({
+        id: 'GaugeX',
+        data: myConfig8,
+        height: "100%",
+        width: "100%"
+      });
+    </script>
+
+
       <a class="border rounded d-inline scroll-to-top" href="#page-top"
         ><i class="fas fa-angle-up"></i
       ></a>

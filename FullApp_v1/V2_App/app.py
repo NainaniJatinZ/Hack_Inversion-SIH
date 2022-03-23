@@ -38,26 +38,30 @@ def lander():
         # print("I work")
         dates = x['Date'].values.tolist()
         closed = x['Close'].values.tolist()
-        volume = x['Volume'].values.tolist()
-        high = x['High'].values.tolist()
-        low = x['Low'].values.tolist()
+        
 
 
+        weekly = x.iloc[::5, :]
+        monthly = x.iloc[::21, :]
+        six_monthly = x.iloc[::42, :]
+        yearly = x.iloc[::260, :]
+
+        
         if request.form:
             indexVal= request.form.getlist('foox')
         
         # print(indexVal[0])
         try:
             if indexVal[0] == '1':
-                return render_template("landing.html",values=closed, labels=dates)
+                return render_template("landing.html",values= x['Close'].values.tolist(), labels= x['Date'].values.tolist())
             elif indexVal[0] == '2':
-                return render_template("landing.html",values=volume, labels=dates)
+                return render_template("landing.html",values=weekly['Close'].values.tolist(), labels= weekly['Date'].values.tolist())
             elif indexVal[0] == '3':
-                return render_template("landing.html",values=high, labels=dates)
+                return render_template("landing.html",values=monthly['Close'].values.tolist(), labels= monthly['Date'].values.tolist())
             elif indexVal[0] == '4':
-                return render_template("landing.html",values=low, labels=dates)
+                return render_template("landing.html",values=six_monthly['Close'].values.tolist(), labels= six_monthly['Date'].values.tolist())
             elif indexVal[0] == '5':
-                return render_template("landing.html",values=closed, labels=dates)
+                return render_template("landing.html",values=yearly['Close'].values.tolist(), labels= yearly['Date'].values.tolist())
         except:
             return render_template("landing.html",values=closed, labels=dates)
         
@@ -97,11 +101,55 @@ def indicators():
     if filePath:
         x = pd.read_csv(filePath)
         input1,pred_god,test_index = LSTMPred(x)
+        
+        
         dates = x['Date'].values.tolist()
-        sma = calculate_sma(data_series=x['Close'], window_size=21*7)
-        ema = calculate_ema(x['Close'], 20*7)
-        macd = calculate_MACD(x)
         closed = x['Close'].values.tolist()
+        dataset = x
+
+        weekly = x.iloc[::5, :]
+        monthly = x.iloc[::21, :]
+        six_monthly = x.iloc[::42, :]
+        yearly = x.iloc[::260, :]
+
+
+        if request.form:
+            indexVal= request.form.getlist('foox')
+        
+        # print(indexVal[0])
+        try:
+            if indexVal[0] == '1':
+                dates = x['Date'].values.tolist()
+                closed = x['Close'].values.tolist()
+                dataset = x
+            elif indexVal[0] == '2':
+                dates = weekly['Date'].values.tolist()
+                closed = weekly['Close'].values.tolist()
+                dataset = weekly
+            elif indexVal[0] == '3':
+                dates = monthly['Date'].values.tolist()
+                closed = monthly['Close'].values.tolist()
+                dataset = monthly
+            elif indexVal[0] == '4':
+                dates = six_monthly['Date'].values.tolist()
+                closed = six_monthly['Close'].values.tolist()
+                dataset = six_monthly
+            elif indexVal[0] == '5':
+                dates = yearly['Date'].values.tolist()
+                closed = yearly['Close'].values.tolist()
+                dataset = yearly
+        except:
+            dates = x['Date'].values.tolist()
+            closed = x['Close'].values.tolist()
+            dataset = x
+
+
+        sma = calculate_sma(data_series=dataset['Close'], window_size=21*7)
+        ema = calculate_ema(dataset['Close'], 20*7)
+        macd = calculate_MACD(dataset)
+        # closed = x['Close'].values.tolist()
+        
+        
         return render_template("indicators.html",xPlot = dates,y1 = sma,y2 = ema,y3 = closed,y4 = macd)    
 
     
