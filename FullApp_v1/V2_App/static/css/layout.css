@@ -19,15 +19,9 @@
 
 body {
     position: relative;
-<<<<<<< HEAD
-    margin: var(--header-height) 0 0 0;
-    left: calc(var(--main-padding) 5rem);
-    padding:  1rem;
-=======
     margin: var(--header-height)  ;
     left: calc(var(--main-padding) 12rem);
     padding: 0 1rem;
->>>>>>> e0e5956dafb2e539e8ec5d331c74534ccdbccc4a
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     transition: .5s

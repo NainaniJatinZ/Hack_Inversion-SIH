@@ -485,7 +485,7 @@
           data:{
             labels:{{xPlot | tojson}},
             datasets:[{
-              label:'Price',
+              label:'SMA',
               data:{{y1 | tojson}},
        
               fill: false,
@@ -493,21 +493,21 @@
               tension: 0.1
             },
             {
-              label:'Forecasted Price',
+              label:'EMA',
               data:{{y2 | tojson}},
        
               fill: false,
               borderColor: 'rgb(255, 0, 0)',
               tension: 0.1
             },
-            // {
-            //   label:'Closing Price',
-            //   data:{{y3 | tojson}},
+            {
+              label:'Closing Price',
+              data:{{y3 | tojson}},
        
-            //   fill: false,
-            //   borderColor: 'rgb(0, 0, 255)',
-            //   tension: 0.1
-            // }
+              fill: false,
+              borderColor: 'rgb(0, 0, 255)',
+              tension: 0.1
+            }
         ]
           },
         });

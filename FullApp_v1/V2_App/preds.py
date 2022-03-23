@@ -52,7 +52,7 @@ def LSTMPred(data):
 
 
 
-    model_e4d4 = tf.keras.models.load_model('models/M1model.h5')
+    model_e4d4 = tf.keras.models.load_model('models/model_e4d4.h5')
 
     X_test = test.iloc[-50:,:]
 

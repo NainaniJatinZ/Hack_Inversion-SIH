@@ -76,6 +76,13 @@ def makePreds():
     threeModel = [['Jan','Feb','March'],[1,2,3]]
     SVR = [['Jan','Feb','March'],[3,2,1]]
 
+
+    if filePath:
+        x = pd.read_csv(filePath)
+        input1,pred_god,test_index = LSTMPred(x)
+        return render_template("prediction.html",LSTMx = test_index,LSTMy = pred_god,threeModelx = input1,threeModely = threeModel[1],SVRx = SVR[0],SVRy = SVR[1])
+
+
     return render_template("prediction.html",LSTMx = LSTM[0],LSTMy = LSTM[1],threeModelx = threeModel[0],threeModely = threeModel[1],SVRx = SVR[0],SVRy = SVR[1])
 
 
@@ -98,11 +105,11 @@ def indicators():
         ema = calculate_ema(x['Close'], 20*7)
         macd = calculate_MACD(x)
         closed = x['Close'].values.tolist()
-        return render_template("indicators.html",xPlot = test_index,y1 = input1,y2 = pred_god,y3 = closed,y4 = macd)    
+        return render_template("indicators.html",xPlot = dates,y1 = sma,y2 = ema,y3 = closed,y4 = macd)    
 
     
 
-    return render_template("indicators.html",LSTMx = LSTM[0],LSTMy = LSTM[1],threeModelx = threeModel[0],threeModely = threeModel[1],SVRx = SVR[0],SVRy = SVR[1])    
+    return render_template("indicators.html",xPlot = [0,0,0,0],y1 = [1,2,3,4],y2 = [4,3,2,1],y3 = [0,0,0,0],y4 = [1,2,3,4])    
 
 
 @app.route('/models', methods= ['GET', 'POST'])
