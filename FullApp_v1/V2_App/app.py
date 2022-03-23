@@ -6,24 +6,55 @@ CORS(app)
 
 filePath = ''
 isUploaded = False
+indexVal = ['1']
 
 @app.route('/', methods= ['GET', 'POST'])
 def lander():
-    
+    global indexVal
     global isUploaded
     
     isUploaded = request.args.get('isUploaded')
 
+
+    # print("It is")
+    
+
+
     if request.method == "GET":
         return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
     if request.method == "POST":
-
+        
         if len(filePath)!=0:
+            
+            
             x = pd.read_csv(filePath)
             print("I work")
             dates = x['Date'].values.tolist()
             closed = x['Close'].values.tolist()
-            return render_template("landing.html",values=closed, labels=dates)
+            volume = x['Volume'].values.tolist()
+            high = x['High'].values.tolist()
+            low = x['Low'].values.tolist()
+
+
+            if request.form:
+                indexVal= request.form.getlist('foox')
+            
+            # print(indexVal[0])
+            try:
+                if indexVal[0] == '1':
+                    return render_template("landing.html",values=closed, labels=dates)
+                elif indexVal[0] == '2':
+                    return render_template("landing.html",values=volume, labels=dates)
+                elif indexVal[0] == '3':
+                    return render_template("landing.html",values=high, labels=dates)
+                elif indexVal[0] == '4':
+                    return render_template("landing.html",values=low, labels=dates)
+                elif indexVal[0] == '5':
+                    return render_template("landing.html",values=closed, labels=dates)
+            except:
+                return render_template("landing.html",values=closed, labels=dates)
+            
+
         else:
             return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
 
@@ -47,7 +78,13 @@ def indicators():
     # x = pd.read_csv(filePath)
     # dates = x['Date'].values.tolist()
     # closed = x['Close'].values.tolist()
-    return render_template("models.html",v1 = 50)
+
+
+    LSTM = [10,20,30]
+    threeModels = [10,20,40]
+    SVR = [60,10,50]
+
+    return render_template("models.html",LSTM = LSTM, threeModels= threeModels, SVR = SVR)
 
 
 @app.route('/upload_static_file', methods=['POST'])
