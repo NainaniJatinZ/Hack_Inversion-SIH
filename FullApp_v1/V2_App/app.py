@@ -17,7 +17,7 @@ indexVal = ['1']
 def lander():
     global indexVal
     global isUploaded
-    
+    gaugeVal = -10
     isUploaded = request.args.get('isUploaded')
 
         
@@ -53,20 +53,20 @@ def lander():
         # print(indexVal[0])
         try:
             if indexVal[0] == '1':
-                return render_template("landing.html",values= x['Close'].values.tolist(), labels= x['Date'].values.tolist())
+                return render_template("landing.html",values= x['Close'].values.tolist(), labels= x['Date'].values.tolist(),gaugeVal=gaugeVal)
             elif indexVal[0] == '2':
-                return render_template("landing.html",values=weekly['Close'].values.tolist(), labels= weekly['Date'].values.tolist())
+                return render_template("landing.html",values=weekly['Close'].values.tolist(), labels= weekly['Date'].values.tolist(),gaugeVal=gaugeVal)
             elif indexVal[0] == '3':
-                return render_template("landing.html",values=monthly['Close'].values.tolist(), labels= monthly['Date'].values.tolist())
+                return render_template("landing.html",values=monthly['Close'].values.tolist(), labels= monthly['Date'].values.tolist(),gaugeVal=gaugeVal)
             elif indexVal[0] == '4':
-                return render_template("landing.html",values=six_monthly['Close'].values.tolist(), labels= six_monthly['Date'].values.tolist())
+                return render_template("landing.html",values=six_monthly['Close'].values.tolist(), labels= six_monthly['Date'].values.tolist(),gaugeVal=gaugeVal)
             elif indexVal[0] == '5':
-                return render_template("landing.html",values=yearly['Close'].values.tolist(), labels= yearly['Date'].values.tolist())
+                return render_template("landing.html",values=yearly['Close'].values.tolist(), labels= yearly['Date'].values.tolist(),gaugeVal=gaugeVal)
         except:
-            return render_template("landing.html",values=closed, labels=dates)
+            return render_template("landing.html",values=closed, labels=dates,gaugeVal=gaugeVal)
         
     
-    return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
+    return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'],gaugeVal=gaugeVal)
 
 
 

@@ -14,7 +14,7 @@
       crossorigin="anonymous"
     />
 
-    <script nonce="undefined" src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.9.0.min.js'></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
@@ -306,93 +306,17 @@
                   <div class="card-body" style="width:90%;">
                     <canvas id="myChart"></canvas>
                   </div>
-
+                  <div id='myDiv'></div>
                 </div>
               </div>
             </div>
             
-
-
             
           </div>
         </div>
         
+        
       </div>
-
-
-
-
-      <div id='GaugeX'></div>
-    <script>
-      ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
-      var myConfig8 = {
-        "type": "gauge",
-        "scale-r": {
-          "aperture": 200,
-          "values": "-100:100:10",
-          "center": {
-            "size": 5,
-            "background-color": "#66CCFF #FFCCFF",
-            "border-color": "none"
-          },
-          "ring": {
-            "size": 10,
-            "rules": [{
-                "rule": "%v >= -100 && %v <= -90",
-                "background-color": "#218A50"
-              },
-              {
-                "rule": "%v >= -90 && %v <= -50",
-                "background-color": "#21B865"
-              },
-              {
-                "rule": "%v >= -50 && %v <= 0",
-                "background-color": "#A2D466"
-              },
-              {
-                "rule": "%v >= 0 && %v <= 50",
-                "background-color": "#F2B450"
-              },
-              {
-                "rule": "%v >= 50 && %v <= 90",
-                "background-color": "#F0880A"
-              },
-              {
-                "rule": "%v >= 90 && %v <= 100",
-                "background-color": "#F01313"
-              }
-            ]
-          },
-          "labels": ["-100","","","","","","","","","","","","","","","","","","","100"], //Scale Labels
-          "item": { //Scale Label Styling
-            "font-color": "purple",
-            "font-family": "Georgia, serif",
-            "font-size": 12,
-            "font-weight": "bold", //or "normal"
-            "font-style": "normal", //or "italic"
-            "offset-r": 0,
-            "angle": "auto"
-          }
-        },
-        "plot": {
-          "csize": "5%",
-          "size": "100%",
-          "background-color": "#000000"
-        },
-        "series": [{
-          "values": [0]//VALUE OF CUSTOM INDEX GOES HERE
-        }]
-      };
-
-      zingchart.render({
-        id: 'GaugeX',
-        data: myConfig8,
-        height: "100%",
-        width: "100%"
-      });
-    </script>
-
-
       <a class="border rounded d-inline scroll-to-top" href="#page-top"
         ><i class="fas fa-angle-up"></i
       ></a>
@@ -419,6 +343,46 @@
   
 
     <script>
+
+
+        let data = [
+          {
+            domain: { x: [0, 1], y: [0, 1] },
+            value: {{gaugeVal | tojson}},
+            title: { text: "Custom Index" },
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+            axis: { range: [-100, 100] },
+            steps: [
+              { range: [-100, -90], color: "#218A50" },
+              { range: [-90, -50], color: "#21B865" },
+              { range: [-50, 0], color: "#A2D466" },
+              { range: [{{gaugeVal | tojson}}, {{gaugeVal | tojson}}+1], color: "#000000" },
+              // { range: [0, 50], color: "#000000" },
+              { range: [0, 50], color: "#F2B450" },
+              { range: [50, 90], color: "#F0880A" },
+              { range: [90, 100], color: "#F01313" }
+            ],
+            threshold: {
+              line: { color: "red", width: 4 },
+              thickness: 0.75,
+              value: 490
+            }
+          }
+          }
+        ]
+
+        var layout = { width: 800, height: 500, margin: { t: 0, b: 0 } };
+        Plotly.newPlot('myDiv', data, layout);
+
+
+
+
+      </script>
+
+      <script>
+
 
         let myChart = document.getElementById('myChart').getContext('2d');
        
@@ -454,7 +418,7 @@
           },
         
         });
-       </script>
+      </script>
 
 
 
