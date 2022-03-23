@@ -1,6 +1,9 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 import pandas as pd
+
+from helpers import calculate_sma,calculate_ema,calculate_MACD
+
 app = Flask(__name__)
 CORS(app)
 
@@ -15,48 +18,52 @@ def lander():
     
     isUploaded = request.args.get('isUploaded')
 
-
-    # print("It is")
-    
-
-
-    if request.method == "GET":
-        return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
-    if request.method == "POST":
         
-        if len(filePath)!=0:
-            
-            
-            x = pd.read_csv(filePath)
-            print("I work")
-            dates = x['Date'].values.tolist()
-            closed = x['Close'].values.tolist()
-            volume = x['Volume'].values.tolist()
-            high = x['High'].values.tolist()
-            low = x['Low'].values.tolist()
+    if len(filePath)!=0:
+        
+        x = pd.read_csv(filePath)
+
+        closed = x['Close'].values.tolist()
+        high = x['High'].values.tolist()
+        low = x['Low'].values.tolist()
+        volume = x['Volume'].values.tolist()
+
+        CurrentVals = [int(closed[-1]),int(high[-1]),int(low[-1]),int(volume[-1])]
 
 
-            if request.form:
-                indexVal= request.form.getlist('foox')
-            
-            # print(indexVal[0])
-            try:
-                if indexVal[0] == '1':
-                    return render_template("landing.html",values=closed, labels=dates)
-                elif indexVal[0] == '2':
-                    return render_template("landing.html",values=volume, labels=dates)
-                elif indexVal[0] == '3':
-                    return render_template("landing.html",values=high, labels=dates)
-                elif indexVal[0] == '4':
-                    return render_template("landing.html",values=low, labels=dates)
-                elif indexVal[0] == '5':
-                    return render_template("landing.html",values=closed, labels=dates)
-            except:
+        
+        
+        # print("I work")
+        dates = x['Date'].values.tolist()
+        closed = x['Close'].values.tolist()
+        volume = x['Volume'].values.tolist()
+        high = x['High'].values.tolist()
+        low = x['Low'].values.tolist()
+
+
+        if request.form:
+            indexVal= request.form.getlist('foox')
+        
+        # print(indexVal[0])
+        try:
+            if indexVal[0] == '1':
                 return render_template("landing.html",values=closed, labels=dates)
+            elif indexVal[0] == '2':
+                return render_template("landing.html",values=volume, labels=dates)
+            elif indexVal[0] == '3':
+                return render_template("landing.html",values=high, labels=dates)
+            elif indexVal[0] == '4':
+                return render_template("landing.html",values=low, labels=dates)
+            elif indexVal[0] == '5':
+                return render_template("landing.html",values=closed, labels=dates)
+        except:
+            return render_template("landing.html",values=closed, labels=dates)
             
 
-        else:
-            return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
+        # else:
+            # return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
+    
+    return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
 
 
 
@@ -70,16 +77,29 @@ def makePreds():
     return render_template("prediction.html",LSTMx = LSTM[0],LSTMy = LSTM[1],threeModelx = threeModel[0],threeModely = threeModel[1],SVRx = SVR[0],SVRy = SVR[1])
 
 
-@app.route('/models', methods= ['GET', 'POST'])
+@app.route('/indicators', methods= ['GET', 'POST'])
 def indicators():
-    # if request.method == "GET":
-    # print("Got request in main function")
+    global filePath
+    LSTM = [['Jan','Feb','March'],[1,2,3]]
+    threeModel = [['Jan','Feb','March'],[1,2,3]]
+    SVR = [['Jan','Feb','March'],[3,2,1]]
 
-    # x = pd.read_csv(filePath)
-    # dates = x['Date'].values.tolist()
-    # closed = x['Close'].values.tolist()
+    if filePath:
+        x = pd.read_csv(filePath)
+        dates = x['Date'].values.tolist()
+        sma = calculate_sma(data_series=x['Close'], window_size=21*7)
+        ema = calculate_ema(x['Close'], 20*7)
+        macd = calculate_MACD(x)
+        closed = x['Close'].values.tolist()
+        return render_template("indicators.html",xPlot = dates,y1 = sma,y2 = ema,y3 = closed,y4 = macd)    
+
+    
+
+    return render_template("indicators.html",LSTMx = LSTM[0],LSTMy = LSTM[1],threeModelx = threeModel[0],threeModely = threeModel[1],SVRx = SVR[0],SVRy = SVR[1])    
 
 
+@app.route('/models', methods= ['GET', 'POST'])
+def models():
     LSTM = [10,20,30]
     threeModels = [10,20,40]
     SVR = [60,10,50]
