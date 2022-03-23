@@ -55,7 +55,7 @@
                       <a href="/models" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i>
                           <span class="nav_name">Models</span> </a> 
                       <a href="/indicators" class="nav_link"> <i class='bx bx-folder nav_icon'></i> 
-                          <span class="nav_name">PREDICTIONS</span> </a>  </div>
+                          <span class="nav_name">Indicators</span> </a>  </div>
               </div>
           </nav>
       </div>
@@ -485,7 +485,7 @@
           data:{
             labels:{{xPlot | tojson}},
             datasets:[{
-              label:'SMA',
+              label:'Price',
               data:{{y1 | tojson}},
        
               fill: false,
@@ -493,21 +493,21 @@
               tension: 0.1
             },
             {
-              label:'SMA',
+              label:'Forecasted Price',
               data:{{y2 | tojson}},
        
               fill: false,
               borderColor: 'rgb(255, 0, 0)',
               tension: 0.1
             },
-            {
-              label:'Closing Price',
-              data:{{y3 | tojson}},
+            // {
+            //   label:'Closing Price',
+            //   data:{{y3 | tojson}},
        
-              fill: false,
-              borderColor: 'rgb(0, 0, 255)',
-              tension: 0.1
-            }
+            //   fill: false,
+            //   borderColor: 'rgb(0, 0, 255)',
+            //   tension: 0.1
+            // }
         ]
           },
         });

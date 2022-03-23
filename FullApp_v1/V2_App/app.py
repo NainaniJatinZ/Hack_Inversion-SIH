@@ -3,6 +3,8 @@ from flask_cors import CORS
 import pandas as pd
 
 from helpers import calculate_sma,calculate_ema,calculate_MACD
+from preds import LSTMPred
+
 
 app = Flask(__name__)
 CORS(app)
@@ -84,14 +86,19 @@ def indicators():
     threeModel = [['Jan','Feb','March'],[1,2,3]]
     SVR = [['Jan','Feb','March'],[3,2,1]]
 
+    
+    
+
+
     if filePath:
         x = pd.read_csv(filePath)
+        input1,pred_god,test_index = LSTMPred(x)
         dates = x['Date'].values.tolist()
         sma = calculate_sma(data_series=x['Close'], window_size=21*7)
         ema = calculate_ema(x['Close'], 20*7)
         macd = calculate_MACD(x)
         closed = x['Close'].values.tolist()
-        return render_template("indicators.html",xPlot = dates,y1 = sma,y2 = ema,y3 = closed,y4 = macd)    
+        return render_template("indicators.html",xPlot = test_index,y1 = input1,y2 = pred_god,y3 = closed,y4 = macd)    
 
     
 
