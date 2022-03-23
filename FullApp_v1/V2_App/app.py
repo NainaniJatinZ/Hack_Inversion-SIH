@@ -60,10 +60,7 @@ def lander():
                 return render_template("landing.html",values=closed, labels=dates)
         except:
             return render_template("landing.html",values=closed, labels=dates)
-            
-
-        # else:
-            # return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
+        
     
     return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'])
 
