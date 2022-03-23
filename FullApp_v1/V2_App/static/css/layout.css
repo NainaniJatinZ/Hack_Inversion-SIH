@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 :root {
-    --header-height: 3rem;
-    --nav-width: 68px;
+    --header-height: 1rem;
+    --nav-width: 8-px;
     --first-color: #4723D9;
     --first-color-light: #AFA5D9;
     --white-color: #F7F6FB;
@@ -19,9 +19,15 @@
 
 body {
     position: relative;
+<<<<<<< HEAD
     margin: var(--header-height) 0 0 0;
     left: calc(var(--main-padding) 5rem);
     padding:  1rem;
+=======
+    margin: var(--header-height)  ;
+    left: calc(var(--main-padding) 12rem);
+    padding: 0 1rem;
+>>>>>>> e0e5956dafb2e539e8ec5d331c74534ccdbccc4a
     font-family: var(--body-font);
     font-size: var(--normal-font-size);
     transition: .5s
@@ -181,4 +187,7 @@ a {
         padding-left: calc(var(--nav-width) + 188px)
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0e5956dafb2e539e8ec5d331c74534ccdbccc4a
