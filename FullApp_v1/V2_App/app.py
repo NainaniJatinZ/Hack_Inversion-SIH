@@ -11,12 +11,16 @@ CORS(app)
 
 filePath = ''
 isUploaded = False
-indexVal = ['1']
+indexVal = ['-1']
+n_future = 2
 
 @app.route('/', methods= ['GET', 'POST'])
 def lander():
     global indexVal
     global isUploaded
+    global n_future
+
+
     gaugeVal = -10
     isUploaded = request.args.get('isUploaded')
     cardVals = [0,0,0,0]
@@ -53,9 +57,18 @@ def lander():
 
         
         if request.form:
-            indexVal= request.form.getlist('foox')
+            
+            if request.form.getlist('foox'):
+                indexVal= request.form.getlist('foox')
+
+            if request.form.getlist('Num'):
+                n_future = int(request.form.getlist('Num')[0])
+            print(f"Gooo: {n_future}")
         
-        # print(indexVal[0])
+        # try:
+        
+        # except:
+        #     print("Error Couldnt Print")
         try:
             if indexVal[0] == '1':
                 return render_template("landing.html",values= x['Close'].values.tolist()[-5:], labels= x['Date'].values.tolist()[-5:],gaugeVal=gaugeVal,cardVals=cardVals)
@@ -67,8 +80,10 @@ def lander():
                 return render_template("landing.html",values=x['Close'].values.tolist()[-183:], labels= x['Date'].values.tolist()[-126:],gaugeVal=gaugeVal,cardVals=cardVals)
             elif indexVal[0] == '5':
                 return render_template("landing.html",values=x['Close'].values.tolist()[-365:], labels= x['Date'].values.tolist()[-260:],gaugeVal=gaugeVal,cardVals=cardVals)
+            else:
+                return render_template("landing.html",values=x['Close'].values.tolist(), labels= x['Date'].values.tolist(),gaugeVal=gaugeVal,cardVals=cardVals)
         except:
-            return render_template("landing.html",values=closed, labels=dates,gaugeVal=gaugeVal,cardVals=cardVals)
+            return render_template("landing.html",values=x['Close'].values.tolist(), labels= x['Date'].values.tolist(),gaugeVal=gaugeVal,cardVals=cardVals)
         
     
     return render_template("landing.html",values=[1,2,3], labels=['Jan','Feb','March'],gaugeVal=gaugeVal,cardVals=cardVals)
@@ -77,7 +92,7 @@ def lander():
 
 @app.route('/preds', methods= ['GET', 'POST'])
 def makePreds():
-    
+    global n_future
     LSTM = [['Jan','Feb','March'],[0,6,1]]
     threeModel = [['Jan','Feb','March'],[1,2,3]]
     SVR = [['Jan','Feb','March'],[3,2,1]]
@@ -95,8 +110,8 @@ def makePreds():
         train, test, data = train_test(data)
         print("Me is")
         print(data['Custom'].values.tolist()[-1])
-        lstm_out, test_index, prev = lstm(train, test, data)
-        lstm_out = lstm_out.tolist()[:1000]
+        lstm_out, test_index, prev = lstm(train, test, data,n_future)
+        lstm_out = lstm_out.tolist()[:n_future]
 
         lstmx = [x for x in range(len(prev)+len(lstm_out))]
         
@@ -106,7 +121,7 @@ def makePreds():
 
         current_date = dates.tolist()[-1]
         current_date_temp = datetime.datetime.strptime(current_date, "%Y-%m-%d")
-        newdate = current_date_temp + datetime.timedelta(days=999)
+        newdate = current_date_temp + datetime.timedelta(days=n_future-1)
 
 
         start_date, end_date = dates.tolist()[-1], newdate
@@ -122,16 +137,16 @@ def makePreds():
 
         XFinalVals = dates.tolist()+ date_list
 
-        stats_out, test_index1, prev = arima_es(train, test, data)
-        stats_out = stats_out[:1000]
+        stats_out, test_index1, prev = arima_es(train, test, data,n_future)
+        stats_out = stats_out[:n_future]
         statsx = [x for x in range(len(prev)+len(stats_out))]
         
         statsy = prev + stats_out 
         # stats_out = stats_out.tolist()
         # print(type(stats_out))
 
-        svr_out, test_index_svr, prev = svr(train, test, data)
-        svr_out = svr_out.tolist()[:1000]
+        svr_out, test_index_svr, prev = svr(train, test, data,n_future)
+        svr_out = svr_out.tolist()[:n_future]
 
         svrx = [x for x in range(len(prev)+len(svr_out))]
         
@@ -180,7 +195,7 @@ def indicators():
 
     if filePath:
         x = pd.read_csv(filePath)
-        input1,pred_god,test_index = LSTMPred(x)
+        # pred_god,test_index,input1 = lstm(x)
         
         
         dates = x['Date'].values.tolist()
@@ -226,11 +241,16 @@ def indicators():
 
         sma = calculate_sma(data_series=dataset['Close'], window_size=21*7)
         ema = calculate_ema(dataset['Close'], 20*7)
-        macd = calculate_MACD(dataset)
-        # closed = x['Close'].values.tolist()
+        ema1 = calculate_ema(dataset['Close'], 12*7)
+        ema2 = calculate_ema(dataset['Close'], 26*7)
+        macd = list()
+        for i in range(len(ema1)):
+            macd.append(ema1[i] - ema2[i])
+        # macd = calculate_MACD(dataset)
+        closed = x['Close'].values.tolist()
         
         
-        return render_template("indicators.html",xPlot = dates,y1 = sma,y2 = ema,y3 = closed,y4 = macd)    
+        return render_template("indicators.html",xPlot = dates[182:],y1 = sma[182:],y2 = ema[182:],y3 = closed[182:],y4 = macd[182:])    
 
     
 
@@ -252,9 +272,14 @@ def models():
 
         best = 'None'
 
-        MAE_lstm,MAE_stat,MAE_svm = getMAE(train,test,data)
+        MAE_lstm,MAE_stat,MAE_svm, mapeLSTM, mapestat, mapesvr = getMAE(train,test,data)
+        LSTM = [round(mapeLSTM, 2)] + LSTM 
         LSTM = [round(MAE_lstm, 2)] + LSTM 
+        
+        threeModels = [round(mapestat, 2)] + threeModels 
         threeModels = [round(MAE_stat, 2)] + threeModels 
+
+        SVR = [round(mapesvr, 2)] + SVR 
         SVR = [round(MAE_svm, 2)] + SVR 
 
         if MAE_lstm < MAE_svm and MAE_lstm < MAE_stat:

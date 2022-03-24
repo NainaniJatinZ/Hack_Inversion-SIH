@@ -19,7 +19,7 @@ def prep(data):
     data.isna().sum()
     return data
 
-def sma(data_series, window_size):
+def calculate_sma(data_series, window_size):
   windows = data_series.rolling(window_size)
   moving_averages = windows.mean()
   moving_averages_list = moving_averages.tolist()
@@ -40,7 +40,7 @@ def calculate_ema(prices, window_size, smoothing=2):
     return emaList
 
 def create_indicators(data):
-    ma = sma(data['Close'], 21*7)
+    ma = calculate_sma(data['Close'], 21*7)
     ema = calculate_ema(data['Close'], 21*7)
 
     ema1 = calculate_ema(data['Close'], 12*7)
@@ -100,10 +100,10 @@ def train_test(data):
 
     return train, test, data
 
-def lstm_mae(train, test, data):
+def lstm_mae(train, test, data,n_future=1000):
     lstm = tf.keras.models.load_model("models/model_e4d4.h5")
 
-    n_future = 1000
+    # n_future = 1000
 
     init_test = np.expand_dims(test.iloc[:50, :], axis=0)
     init_test = np.asarray(init_test).astype(np.float32)
@@ -120,10 +120,10 @@ def lstm_mae(train, test, data):
     fc1 = pd.Series(pred_val[0], index=test_index)
     return pred_val[0] , test_index
 
-def lstm(train, test, data):
+def lstm(train, test, data,n_future = 1000):
     lstm = tf.keras.models.load_model("models/model_e4d4.h5")
 
-    n_future = 1000
+    
 
     init_test = np.expand_dims(test.iloc[-50:, :], axis=0)
     init_test = np.asarray(init_test).astype(np.float32)
@@ -141,8 +141,8 @@ def lstm(train, test, data):
     prev = data["Close"].values.tolist()
     return pred_val[0] , test_index, prev
 
-def arima_es_mae(data):
-    n_future = 1000
+def arima_es_mae(data,n_future = 1000):
+    
     arima = joblib.load('models/arima_direct_fore.pkl')
     es = joblib.load('models/expo_hope.pkl')
     fore, se, conf = arima.forecast(n_future+50, alpha=0.05)
@@ -173,8 +173,8 @@ def arima_es_mae(data):
     return vals, test_index1
 
 
-def arima_es(train, test, data):
-    n_future = 1000
+def arima_es(train, test, data,n_future = 1000):
+    
     arima = joblib.load('models/arima_direct_fore.pkl')
     es = joblib.load('models/expo_hope.pkl')
 
@@ -206,8 +206,8 @@ def arima_es(train, test, data):
     prev = data["Close"].values.tolist()
     return vals, test_index1, prev
 
-def svr_mae(train, test, data):
-    n_future = 1000
+def svr_mae(train, test, data,n_future = 1000):
+    
     with open('models/svr_final.pkl', 'rb') as pickle_file:
         svm = pickle.load(pickle_file)
 
@@ -224,8 +224,7 @@ def svr_mae(train, test, data):
     forget_this_cast = pd.Series(init[0], index=test_index_svr)
     return init[0], test_index_svr
 
-def svr(train, test, data):
-    n_future = 1000
+def svr(train, test, data,n_future = 1000):
     with open('models/svr_final.pkl', 'rb') as pickle_file:
         svm = pickle.load(pickle_file)
 
@@ -249,23 +248,35 @@ def svr(train, test, data):
 # data
 
 
+# def mape(actual, pred): 
+    
+#     return np.mean(np.abs((actual - pred) / actual)) * 100
 
-def getMAE(train,test,data):
-    lstm_1, test_index_01 = lstm_mae(train, test, data)
+def getMAE(train,test,data,n_future = 1000):
+    lstm_1, test_index_01 = lstm_mae(train, test, data,n_future)
     MAE_lstm = mean_absolute_error(test['Close'], lstm_1[:len(test['Close'])])
     print("MAE for LSTM: "+str(MAE_lstm))
+    
+    actual, predLSTM = np.array(test['Close']), np.array(lstm_1[:len(test['Close'])])
+    mapeLSTM = np.mean(np.abs((actual - predLSTM) / actual)) * 100
 
-    stats_1, test_index1 = arima_es_mae(data)
+    stats_1, test_index1 = arima_es_mae(data,n_future)
     fc1 = pd.Series(stats_1, index=test_index1)
     MAE_stat = mean_absolute_error(test['Close'], stats_1[:len(test['Close'])])
     print("MAE for Statistical: "+str(MAE_stat))
+    
+    actual, predstat = np.array(test['Close']), np.array(stats_1[:len(test['Close'])])
+    mapestat = np.mean(np.abs((actual - predstat) / actual)) * 100
 
-    svr_1, test_index_svr = svr_mae(train, test, data)
+    svr_1, test_index_svr = svr_mae(train, test, data,n_future)
     forget_this_cast = pd.Series(svr_1, index=test_index_svr)
     MAE_svm = mean_absolute_error(test['Close'], svr_1[:len(test['Close'])])
     print("MAE for SVM: "+str(MAE_svm))
 
-    return MAE_lstm,MAE_stat,MAE_svm
+    actual, predsvr = np.array(test['Close']), np.array(svr_1[:len(test['Close'])])
+    mapesvr = np.mean(np.abs((actual - predsvr) / actual)) * 100
+
+    return MAE_lstm, MAE_stat, MAE_svm, mapeLSTM, mapestat, mapesvr
 
 
 
