@@ -29,6 +29,7 @@ def lander():
         
         x = pd.read_csv(filePath)
 
+        # Data Preprocessing
         data = prep(x)
         data = create_indicators(data)
         gaugeVal = data['Custom'].values.tolist()[-1]
@@ -43,7 +44,6 @@ def lander():
 
         
         
-        # print("I work")
         dates = x['Date'].values.tolist()
         closed = x['Close'].values.tolist()
         
@@ -56,6 +56,7 @@ def lander():
         yearly = x.iloc[::260, :]
 
         
+        # Button request to render different graphs
         if request.form:
             
             if request.form.getlist('foox'):
@@ -65,10 +66,6 @@ def lander():
                 n_future = int(request.form.getlist('Num')[0])
             print(f"Gooo: {n_future}")
         
-        # try:
-        
-        # except:
-        #     print("Error Couldnt Print")
         try:
             if indexVal[0] == '1':
                 return render_template("landing.html",values= x['Close'].values.tolist()[-5:], labels= x['Date'].values.tolist()[-5:],gaugeVal=gaugeVal,cardVals=cardVals)
@@ -108,17 +105,14 @@ def makePreds():
 
         data = create_indicators(data)
         train, test, data = train_test(data)
-        print("Me is")
-        print(data['Custom'].values.tolist()[-1])
         lstm_out, test_index, prev = lstm(train, test, data,n_future)
         lstm_out = lstm_out.tolist()[:n_future]
 
         lstmx = [x for x in range(len(prev)+len(lstm_out))]
         
         lstmy = prev + lstm_out 
-
-        # 
-
+        
+        # Creating the X axis list
         current_date = dates.tolist()[-1]
         current_date_temp = datetime.datetime.strptime(current_date, "%Y-%m-%d")
         newdate = current_date_temp + datetime.timedelta(days=n_future-1)
@@ -132,9 +126,6 @@ def makePreds():
 
 
 
-        print("Dates Are:")
-        print(len(dates.tolist()),len(date_list))
-
         XFinalVals = dates.tolist()+ date_list
 
         stats_out, test_index1, prev = arima_es(train, test, data,n_future)
@@ -142,8 +133,6 @@ def makePreds():
         statsx = [x for x in range(len(prev)+len(stats_out))]
         
         statsy = prev + stats_out 
-        # stats_out = stats_out.tolist()
-        # print(type(stats_out))
 
         svr_out, test_index_svr, prev = svr(train, test, data,n_future)
         svr_out = svr_out.tolist()[:n_future]
@@ -151,17 +140,11 @@ def makePreds():
         svrx = [x for x in range(len(prev)+len(svr_out))]
         
         svry = prev + svr_out 
-        # print(type(svr_out))
         
         print("Lens Are:")
         print(len(lstm_out),len(stats_out),len(svr_out))
 
-
-
-        # CSV
-        # print("CSV LEN")
-        # print(len(XFinalVals[:len(lstmy)]),len(lstmy))
-
+        # Sending outputs of models
         LSTMCSV = pd.DataFrame({'Dates':XFinalVals[:len(lstmy)],'Price':lstmy})
         LSTMCSV.to_csv("static/outputs/lstmOutput.csv")
 
@@ -171,11 +154,6 @@ def makePreds():
         svrCSV = pd.DataFrame({'Dates':XFinalVals[:len(svry)],'Price':svry})
         svrCSV.to_csv("static/outputs/svrOutput.csv")
 
-        # LSTMCSV = pd.DataFrame({'Dates':XFinalVals,'Price':lstmy})
-        # LSTMCSV = pd.DataFrame({'Dates':XFinalVals,'Price':lstmy})
-
-
-        # input1,pred_god,test_index = LSTMPred(x)
         return render_template("prediction.html",LSTMx = XFinalVals,LSTMy = lstmy,LSTMprev = prev ,threeModelx = XFinalVals,threeModely = statsy,SVRx = XFinalVals,SVRy = svry)
 
 
@@ -195,8 +173,6 @@ def indicators():
 
     if filePath:
         x = pd.read_csv(filePath)
-        # pred_god,test_index,input1 = lstm(x)
-        
         
         dates = x['Date'].values.tolist()
         closed = x['Close'].values.tolist()
@@ -207,11 +183,9 @@ def indicators():
         six_monthly = x.iloc[::42, :]
         yearly = x.iloc[::260, :]
 
-
         if request.form:
             indexVal= request.form.getlist('foox')
         
-        # print(indexVal[0])
         try:
             if indexVal[0] == '1':
                 dates = x['Date'].values.tolist()
@@ -246,7 +220,6 @@ def indicators():
         macd = list()
         for i in range(len(ema1)):
             macd.append(ema1[i] - ema2[i])
-        # macd = calculate_MACD(dataset)
         closed = x['Close'].values.tolist()
         
         
@@ -271,7 +244,6 @@ def models():
         train, test, data = train_test(data)
 
         bgColors = ['white','white','white']
-        # best = 0
 
         MAE_lstm,MAE_stat,MAE_svm, mapeLSTM, mapestat, mapesvr = getMAE(train,test,data)
         LSTM = [round(mapeLSTM, 2)] + LSTM 
@@ -314,7 +286,4 @@ def upload_static_file():
 
 
 if __name__ == "__main__":
-
-
-
     app.run()

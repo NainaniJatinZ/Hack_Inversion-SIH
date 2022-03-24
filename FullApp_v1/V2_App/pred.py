@@ -1,3 +1,4 @@
+# Importing all the required Libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,13 +13,14 @@ from sklearn.metrics import mean_absolute_error
 import pickle
 
 
-
+# Getting essential features and cleaning the dataset
 def prep(data):
     data = data[['Date', 'Close', 'Volume']]
     data = data.fillna(data.mean())
     data.isna().sum()
     return data
 
+# First Indicator: Simple Moving Average
 def calculate_sma(data_series, window_size):
   windows = data_series.rolling(window_size)
   moving_averages = windows.mean()
@@ -28,21 +30,20 @@ def calculate_sma(data_series, window_size):
   moving_averages_list = [0 if math.isnan(x) else x for x in moving_averages_list]
   return moving_averages_list
 
+# Second Indicator: Exponential Moving Average
 def calculate_ema(prices, window_size, smoothing=2):
     ema = [sum(prices[:window_size]) / window_size]
     for price in prices[window_size:]:
-        ema.append((price * (smoothing / (1 + window_size))) + ema[-1] * (1 - (smoothing / (1 + window_size))))
-    # print(len(ema))
-    
+        ema.append((price * (smoothing / (1 + window_size))) + ema[-1] * (1 - (smoothing / (1 + window_size))))  
     emaList = [0 for i in range(window_size-1)]
     emaList = [y for x in [emaList, ema] for y in x]
-    # emaList = emaList + ema
     return emaList
 
 def create_indicators(data):
     ma = calculate_sma(data['Close'], 21*7)
     ema = calculate_ema(data['Close'], 21*7)
 
+    # Third Indicator: Moving Average Convergence Divergence
     ema1 = calculate_ema(data['Close'], 12*7)
     ema2 = calculate_ema(data['Close'], 26*7)
 
@@ -50,6 +51,7 @@ def create_indicators(data):
     for i in range(len(ema1)):
         macd.append(ema1[i] - ema2[i])
 
+    # Fourth Indicator: A custom indicator
     u = [sum(x)/2 for x in zip(ma, ema)]
     Kr = 0.3
     Kp = 0.9
@@ -69,6 +71,7 @@ def create_indicators(data):
             x = (1 - (u[i]*(1 + Kr)*(1 - Kp))/P)*100
         custom.append(x)
 
+    # Fetching all the necessary features
     data['SMA']= pd.Series(ma)
     data['EMA']= pd.Series(ema)
     data['MACD']= pd.Series(macd)
@@ -100,10 +103,9 @@ def train_test(data):
 
     return train, test, data
 
+# Function to get Error of LSTM Model
 def lstm_mae(train, test, data,n_future=1000):
     lstm = tf.keras.models.load_model("models/model_e4d4.h5")
-
-    # n_future = 1000
 
     init_test = np.expand_dims(test.iloc[:50, :], axis=0)
     init_test = np.asarray(init_test).astype(np.float32)
@@ -116,14 +118,12 @@ def lstm_mae(train, test, data,n_future=1000):
     test_index = []
     for i in range(int(len(data)*0.7), int(len(data)*0.7)+ init_test.shape[1]):
         test_index.append(i)
-    # print(int(len(data)*0.7))
     fc1 = pd.Series(pred_val[0], index=test_index)
     return pred_val[0] , test_index
 
+# Function to get the list of predictions
 def lstm(train, test, data,n_future = 1000):
     lstm = tf.keras.models.load_model("models/model_e4d4.h5")
-
-    
 
     init_test = np.expand_dims(test.iloc[-50:, :], axis=0)
     init_test = np.asarray(init_test).astype(np.float32)
@@ -136,11 +136,10 @@ def lstm(train, test, data,n_future = 1000):
     test_index = []
     for i in range(int(len(data)), int(len(data))+ init_test.shape[1]):
         test_index.append(i)
-    # print(int(len(data)*0.7))
-    # fc1 = pd.Series(pred_val[0], index=test_index)
     prev = data["Close"].values.tolist()
     return pred_val[0] , test_index, prev
 
+# Function to get Error of Statistical Method
 def arima_es_mae(data,n_future = 1000):
     
     arima = joblib.load('models/arima_direct_fore.pkl')
@@ -151,8 +150,6 @@ def arima_es_mae(data,n_future = 1000):
     test_index1 = []
     for i in range(int(len(data)*0.7), int(len(data)*0.7)+ fore.shape[0]):
         test_index1.append(i)
-
-
 
     fc_series = pd.Series(fore, index=test_index1)
     lower_series = pd.Series(conf[:, 0], index=test_index1)
@@ -172,14 +169,13 @@ def arima_es_mae(data,n_future = 1000):
     vals=fore_this_cast.values.tolist()
     return vals, test_index1
 
-
+# Function to get the list of predictions
 def arima_es(train, test, data,n_future = 1000):
     
     arima = joblib.load('models/arima_direct_fore.pkl')
     es = joblib.load('models/expo_hope.pkl')
 
     fore, se, conf = arima.forecast(n_future+50, alpha=0.05)
-    # print(fore.shape)
 
     test_index1 = []
     for i in range(int(len(data)), int(len(data))+ fore.shape[0]):
@@ -206,6 +202,7 @@ def arima_es(train, test, data,n_future = 1000):
     prev = data["Close"].values.tolist()
     return vals, test_index1, prev
 
+# Function to get Error of Statistical Method
 def svr_mae(train, test, data,n_future = 1000):
     
     with open('models/svr_final.pkl', 'rb') as pickle_file:
@@ -224,6 +221,7 @@ def svr_mae(train, test, data,n_future = 1000):
     forget_this_cast = pd.Series(init[0], index=test_index_svr)
     return init[0], test_index_svr
 
+# Function to get the list of predictions
 def svr(train, test, data,n_future = 1000):
     with open('models/svr_final.pkl', 'rb') as pickle_file:
         svm = pickle.load(pickle_file)
@@ -233,7 +231,6 @@ def svr(train, test, data,n_future = 1000):
     for i in range(n_future):
         pred=np.expand_dims(svm.predict(init[:, -30:]), axis=0)
         init = np.concatenate((init, pred), axis=1)
-    # print(init.shape)
     test_index_svr = []
     for i in range(int(len(data)), int(len(data))+ init.shape[1]):
         test_index_svr.append(i)
@@ -242,15 +239,6 @@ def svr(train, test, data,n_future = 1000):
     prev = data["Close"].values.tolist()
     return init[0], test_index_svr, prev 
 
-
-# data = pd.read_csv('receivedCSV/nymex_4ind.csv')
-
-# data
-
-
-# def mape(actual, pred): 
-    
-#     return np.mean(np.abs((actual - pred) / actual)) * 100
 
 def getMAE(train,test,data,n_future = 1000):
     lstm_1, test_index_01 = lstm_mae(train, test, data,n_future)
@@ -280,40 +268,4 @@ def getMAE(train,test,data,n_future = 1000):
 
 
 
-
-# lstm_out, test_index, prev = lstm(train, test, data)
-
-# fc1 = pd.Series(lstm_out, index=test_index)
-# plt.figure(figsize=(12,5), dpi=100)
-# plt.plot(train['Close'])
-# plt.plot(test['Close'])
-# plt.plot(fc1)
-# plt.show()
-
-# stats_out, test_index1, prev = arima_es(train, test, data)
-
-# fc1 = pd.Series(stats_out, index=test_index1)
-# plt.figure(figsize=(12,5), dpi=100)
-# plt.plot(train['Close'], label='training')
-# plt.plot(test['Close'], label='actual')
-# plt.plot(fc1)
-# plt.title('Forecast vs Actuals')
-# plt.legend(loc='upper left', fontsize=8)
-# plt.show()
-
-# svr_out, test_index_svr, prev = svr(train, test, data)
-# svr_out = svr_out.tolist()
-# forget_this_cast = pd.Series(svr_out, index=test_index_svr)
-# plt.figure(figsize=(12,5), dpi=100)
-# plt.plot(train['Close'], label='training')
-# plt.plot(test['Close'], label='actual')
-# plt.plot(forget_this_cast, label='forecast')
-# plt.title('Forecast vs Actuals')
-# plt.legend(loc='upper left', fontsize=8)
-# plt.show()
-
-# print(type(stats_out[1]))
-# print(len(svr_out))
-# print(len(lstm_out))
-# print(len(stats_out))
 
