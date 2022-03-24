@@ -230,7 +230,7 @@
                       class="card-header d-flex justify-content-between align-items-center"
                     >
                       <h6 class="text-primary fw-bold m-0">
-                        GARCH+ARIMA+EMS&nbsp;
+                        ARIMA+EMS&nbsp;
                       </h6>
                       <div
                         class="btn-group"
@@ -435,14 +435,7 @@
             </div>
           </div>
         </div>
-        <footer class="bg-white sticky-footer">
-          <div class="container my-auto">
-            <div class="text-center my-auto copyright">
-              <span>Copyright © Brand 2022</span>
-            </div>
-          </div>
-        </footer>
-      </div>
+        
       <a class="border rounded d-inline scroll-to-top" href="#page-top"
         ><i class="fas fa-angle-up"></i
       ></a>
@@ -484,20 +477,21 @@
             labels:{{LSTMx | tojson}},
             datasets:[{
               label:'Closing Price',
-              data:{{LSTMy | tojson}},
+              data:{{LSTMprev | tojson}},
        
               fill: false,
               borderColor: 'rgb(0, 255, 0)',
               tension: 0.1
             },
             {
-              label:'Actual Price',
-              data:{{threeModelx | tojson}},
+              label:'Old',
+              data:{{LSTMy | tojson}},
        
               fill: false,
               borderColor: 'rgb(255, 0, 0)',
               tension: 0.1
-            }]
+            },
+          ]
           },
         });
        </script>
@@ -520,12 +514,21 @@
       labels:{{threeModelx | tojson}},
       datasets:[{
         label:'Closing Price',
+        data:{{LSTMprev | tojson}},
+ 
+        fill: false,
+        borderColor: 'rgb(0,255,0)',
+        tension: 0.1
+      },
+      {
+        label:'Closing Price',
         data:{{threeModely | tojson}},
  
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgb(255,0,0)',
         tension: 0.1
-      }]
+      },
+    ]
     },
   });
  </script>
@@ -546,12 +549,21 @@
       labels:{{SVRx | tojson}},
       datasets:[{
         label:'Closing Price',
+        data:{{LSTMprev | tojson}},
+ 
+        fill: false,
+        borderColor: 'rgb(0,255,0)',
+        tension: 0.1
+      },
+      {
+        label:'Closing Price',
         data:{{SVRy | tojson}},
  
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgb(255,0,0)',
         tension: 0.1
-      }]
+      }
+    ]
     },
   });
  </script>

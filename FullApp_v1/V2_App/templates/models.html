@@ -88,7 +88,10 @@
                 
 
                 <div class="container">
-                    <h3 class="text-dark mb-4">Evaluation Metrics: Comparison</h3>
+                    <h3 class="text-dark mb-4">Evaluation Metrics: Comparison </h3> 
+                    <!-- <script>
+                        document.write({{best}})
+                    </script> -->
                     <div class="row mb-3" style="width:80%;">
                         <div class="col-lg-4" style="background: rgba(49,167,125,0.69);">
                             <div class="card mb-3"></div>
@@ -97,15 +100,17 @@
                                     <h6 class="text-primary fw-bold m-0">LSTM</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small fw-bold">RMSE<span class="float-end">{{LSTM[0]}}</span></h4>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" id="" aria-valuenow="{{LSTM[0]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{LSTM[0]}}%;"><span class="visually-hidden">{{LSTM[0]}}%</span></div>
+                                    <h4 class="small fw-bold">MAE<span class="float-end">{{LSTM[0]}}</span></h4>
+                                    <!-- <div class="progress progress-sm mb-3">
+                                        <div class="progress-bar bg-danger" id="" aria-valuenow="{{LSTM[0]}}" aria-valuemin="0" aria-valuemax="2" style="width: {{LSTM[0]}}%;"><span class="visually-hidden">{{LSTM[0]}}%</span></div>
+                                    </div> -->
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{LSTM[0]}}" aria-valuemin="0" aria-valuemax="4"></div>
                                     </div>
 
-
-                                    <script>
+                                    <!-- <script>
                                         document.getElementById("myProgress").value = "75";
-                                    </script>
+                                    </script> -->
 
                                     
 
@@ -116,7 +121,10 @@
                                     <h4 class="small fw-bold">M-DM Test<span class="float-end">{{LSTM[2]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
                                         <div class="progress-bar bg-primary" aria-valuenow="{{LSTM[2]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{LSTM[2]}}%;"><span class="visually-hidden">{{LSTM[2]}}%</span></div>
-                                    </div><button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </div>
+                                    <a href="{{ url_for('static',filename='outputs/lstmOutput.csv') }}" download>
+                                        <button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -128,9 +136,9 @@
                                     <h6 class="text-primary fw-bold m-0">GARCH + ARIMA + EMS</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small fw-bold">RMSE<span class="float-end">{{threeModels[0]}}</span></h4>
+                                    <h4 class="small fw-bold">MAE<span class="float-end">{{threeModels[0]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" aria-valuenow="{{threeModels[0]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{threeModels[0]}}%;"><span class="visually-hidden">{{threeModels[0]}}%</span></div>
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{threeModels[0]}}" aria-valuemin="0" aria-valuemax="2" style="width: {{threeModels[0]}}%;"><span class="visually-hidden">{{threeModels[0]}}%</span></div>
                                     </div>
                                     <h4 class="small fw-bold">AIC<span class="float-end">{{threeModels[1]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
@@ -139,7 +147,10 @@
                                     <h4 class="small fw-bold">M-DM Test<span class="float-end">{{threeModels[2]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
                                         <div class="progress-bar bg-primary" aria-valuenow="{{threeModels[2]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{threeModels[2]}}%;"><span class="visually-hidden">{{threeModels[2]}}%</span></div>
-                                    </div><button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </div>
+                                    <a href="{{ url_for('static',filename='outputs/statsOutput.csv') }}" download>
+                                        <button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -150,9 +161,9 @@
                                     <h6 class="text-primary fw-bold m-0">SVR</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small fw-bold">RMSE<span class="float-end">{{SVR[0]}}</span></h4>
+                                    <h4 class="small fw-bold">MAE<span class="float-end">{{SVR[0]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-danger" aria-valuenow="{{SVR[0]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{SVR[0]}}%;"><span class="visually-hidden">{{SVR[0]}}%</span></div>
+                                        <div class="progress-bar bg-danger" aria-valuenow="{{SVR[0]}}" aria-valuemin="0" aria-valuemax="2" style="width: {{SVR[0]}}%;"><span class="visually-hidden">{{SVR[0]}}%</span></div>
                                     </div>
                                     <h4 class="small fw-bold">AIC<span class="float-end">{{SVR[1]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
@@ -161,7 +172,10 @@
                                     <h4 class="small fw-bold">M-DM Test<span class="float-end">{{SVR[2]}}</span></h4>
                                     <div class="progress progress-sm mb-3">
                                         <div class="progress-bar bg-primary" aria-valuenow="{{SVR[2]}}" aria-valuemin="0" aria-valuemax="100" style="width: {{SVR[2]}}%;"><span class="visually-hidden">{{SVR[2]}}%</span></div>
-                                    </div><button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </div>
+                                    <a href="{{ url_for('static',filename='outputs/svrOutput.csv') }}" download>
+                                        <button class="btn btn-primary" type="button" style="font-size: 12px;">Download</button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
