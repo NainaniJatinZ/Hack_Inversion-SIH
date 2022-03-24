@@ -14,6 +14,8 @@
       crossorigin="anonymous"
     />
 
+    <script src='https://cdn.plot.ly/plotly-2.9.0.min.js'></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
     <link
@@ -33,10 +35,17 @@
       href="../stiatic/fonts/fontawesome5-overrides.min.css"
     />
     <link rel=stylesheet type="text/css" href="{{ url_for('static',filename='css/layout.css') }}">
+    <link rel=stylesheet type="text/css" href="{{ url_for('static',filename='css/untitled.css') }}">
     <!-- <link rel="stylesheet" href="assets/css/untitled.css"> -->
   </head>
 
-  <body id="page-top">
+  <body >
+    <div class="jumbotron">
+      <h1>Dashboard</h1>
+      <!-- <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive,
+      mobile-first projects on the web.</p> -->
+    </div>
+    
     <div id="wrapper">
         <header class="header" id="header">
             <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
@@ -44,7 +53,7 @@
         </header>
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
-                <div> <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">BBBootstrap</span> </a>
+                <div> <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">Hack Inversion</span> </a>
                     <div class="nav_list">  
                         <a href="/" class="nav_link"> <i class='bx bx-user nav_icon'></i> 
                             <span class="nav_name">Dashboard</span> </a> 
@@ -53,14 +62,10 @@
                         <a href="/models" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i>
                             <span class="nav_name">Models</span> </a> 
                         <a href="/indicators" class="nav_link"> <i class='bx bx-folder nav_icon'></i> 
-                            <span class="nav_name">PREDICTIONS</span> </a>  </div>
+                            <span class="nav_name">Indicators</span> </a>  </div>
                 </div>
             </nav>
         </div>
-        <!--Container Main start-->
-        <!-- <div class="height-100 bg-light">
-            <h4>Main Components</h4>
-        </div> -->
         <script>
                 document.addEventListener("DOMContentLoaded", function(event) {
 
@@ -106,44 +111,107 @@
         <!-- Nav -->
 
 
-      <div class="d-flex flex-column" id="content-wrapper">
+      <div class="d-flex flex-column">
+        
         <div id="content">
 
-          <h3 class="text-dark mb-4" style="padding-left: 21px">Dashboard</h3>
-          <div class="container-fluid">
+          
+          <div class="container">
+              
             <div
               class="d-sm-flex justify-content-between align-items-center mb-4"
             >
-              <!-- <a
-                class="btn btn-primary btn-sm d-none d-sm-inline-block"
-                role="button"
-                href="#"
-                ><i class="fas fa-download fa-sm text-white-50"></i>&nbsp;Upload
-                CSV</a> -->
-
-                <form action = '/visualize' enctype = "multipart/form-data" onsubmit=" return false;" >
-                    <input id="file" type="file" name="static_file" />
-                    <button class="btn btn-primary btn-sm d-none d-sm-inline-block" id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
-                    </form>
-                  <div id="static_file_response"> </div>
-                 
-                  <script type="text/javascript" src="/static/app.js"></script>
-                  </script>
-              
-            <!-- <a class="btn btn-default btn-lg" id="start" onclick="changeUploadStat()">Start!</a> -->
-
-            <form action="" method="post">
-                <button class="btn btn-primary btn-sm d-none d-sm-inline-block" name="foo" value="Do Something Man!"><i class="fas fa-download fa-sm text-white-50"></i
-                    >&nbsp;Visualize</button>
-                
-            </form>
-
-
-            
-
 
             </div>
-            <div class="row">
+            </div>
+
+            <div class="row" style="width:85%;">
+              <div class="col-md-6 col-xl-3 mb-4">
+                
+                  
+                    <div class="row align-items-center no-gutters">
+                      
+                      
+                    </div>
+                  
+                
+              <!-- </div>
+              
+              
+            
+          </div> -->
+            </div>
+            </div>
+
+
+            <div class="row" style="width:85%;">
+              <div class="col-md-12 col-xl-6 mb-4">
+                <div class="card shadow border-start-primary py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-primary fw-bold text-xs mb-1"
+                        >
+                          <span>Upload&nbsp;File</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>
+
+                            <form enctype = "multipart/form-data" onsubmit=" return false;" >
+                              <input id="file" type="file" name="static_file" />
+                              <button class="btn btn-primary btn-sm d-none d-sm-inline-block"  id="upload-button" onclick="uploadFile(this.form)"> Upload </button>
+                              </form>
+                            <!-- <div id="static_file_response"> </div> -->
+                           
+                            <script type="text/javascript" src="/static/app.js"></script>
+                            </script>
+
+                          </span>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-xl-6 mb-4">
+                <div class="card shadow border-start-success py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-4">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span>Days to Forecast</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>
+                            <form action="" method="post">
+                              <input type="number" id="NumDays" name="Num"  placeholder="Number of Days">
+                              <!-- <button class="btn btn-primary btn-sm d-none d-sm-inline-block" name="foo" value="Do Something Man!" style="position:relative;left:20 px"id="viz"><i class="fas fa-download fa-sm text-white-50"></i
+                                  >&nbsp;Visualize</button> -->
+                              
+                          </form>
+
+
+
+                          </span>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+
+
+
+
+            <div class="row" style="width:85%;">
               <div class="col-md-6 col-xl-3 mb-4">
                 <div class="card shadow border-start-primary py-2">
                   <div class="card-body">
@@ -155,7 +223,7 @@
                           <span>Current&nbsp;Price</span>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span>$4.989</span>
+                          <span>${{cardVals[0]}}</span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -176,7 +244,7 @@
                           <span>High</span>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span>$5.0</span>
+                          <span>${{cardVals[1]}}</span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -197,7 +265,7 @@
                           <span>Low</span>
                         </div>
                         <div class="text-dark fw-bold h5 mb-0">
-                          <span>$4.5</span>
+                          <span>${{cardVals[2]}}</span>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -220,20 +288,18 @@
                         <div class="row g-0 align-items-center">
                           <div class="col-auto">
                             <div class="text-dark fw-bold h5 mb-0 me-3">
-                              <span>$ 29 B</span>
+                              <span>{{cardVals[3]}}</span>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                      </div>
+                      <!-- <div cf== -->
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" style="width:85%;">
               <div class="col-lg-7 col-xl-8" style="width: 100%">
                 <div class="card shadow mb-4">
                   <div
@@ -252,82 +318,7 @@
                         text-align: right;
                       "
                     >
-                      <!-- <button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1d</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1w</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        1m</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        3m</button
-                      ><button
-                        class="btn btn-primary"
-                        type="button"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        6m</button
-                      > -->
-                      
                      
-                      <!-- <button
-                        class="btn btn-primary"
-                        type="submit" value="12msss"
-                        style="
-                          font-size: 12px;
-                          padding-top: 4.5px;
-                          padding-right: 9px;
-                          padding-bottom: 4.5px;
-                          padding-left: 9px;
-                        "
-                      >
-                        12m
-                      </button> -->
 
                       <form action="" method="post">
                         <button class="btn btn-primary" name="foox" value="1" style="
@@ -336,7 +327,7 @@
                         padding-right: 9px;
                         padding-bottom: 4.5px;
                         padding-left: 9px;
-                      ">&nbsp;1d</button>
+                      ">&nbsp;5d</button>
 
                         <button class="btn btn-primary" name="foox" value="2" style="
                         font-size: 12px;
@@ -375,59 +366,21 @@
                     </div>
                   </div>
 
-                  <divclass="card-body">
+                  <div class="card-body" style="width:90%;">
                     <canvas id="myChart"></canvas>
                   </div>
-
-
-                  <!-- <div class="card-body">
-                    <div class="chart-area">
-                      <canvas
-                        data-bss-chart='{"type":"line","data":{"labels":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],"datasets":[{"label":"Earnings","fill":true,"data":["0","10000","5000","15000","10000","20000","15000","25000"],"backgroundColor":"rgba(78, 115, 223, 0.05)","borderColor":"rgba(78, 115, 223, 1)"}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"},"scales":{"xAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"],"drawOnChartArea":false},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}],"yAxes":[{"gridLines":{"color":"rgb(234, 236, 244)","zeroLineColor":"rgb(234, 236, 244)","drawBorder":false,"drawTicks":false,"borderDash":["2"],"zeroLineBorderDash":["2"]},"ticks":{"fontColor":"#858796","fontStyle":"normal","padding":20}}]}}}'
-                      ></canvas>
-                    </div>
-                  </div> -->
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div class="row">
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-primary text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-warning text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col" align="center">
-                    <img src="../static/img/Guage.png" />
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-danger text-white shadow"
-                    ></div>
-                  </div>
-                  <div class="col-lg-6 mb-4">
-                    <div
-                      class="card textwhite bg-secondary text-white shadow"
-                    ></div>
+                  <div class="d-flex flex-column">
+                    <div id='myDiv' style="padding-left: 15%;" ></div>
                   </div>
                 </div>
               </div>
             </div>
+            
+            
           </div>
         </div>
-        <footer class="bg-white sticky-footer">
-          <div class="container my-auto">
-            <div class="text-center my-auto copyright">
-              <span>Copyright © Brand 2022</span>
-            </div>
-          </div>
-        </footer>
+        
+        
       </div>
       <a class="border rounded d-inline scroll-to-top" href="#page-top"
         ><i class="fas fa-angle-up"></i
@@ -456,6 +409,46 @@
 
     <script>
 
+
+        let data = [
+          {
+            domain: { x: [0, 1], y: [0, 1] },
+            value: {{gaugeVal | tojson}},
+            title: { text: "Custom Index" },
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+            axis: { range: [-100, 100] },
+            steps: [
+              { range: [-100, -90], color: "#218A50" },
+              { range: [-90, -50], color: "#21B865" },
+              { range: [-50, 0], color: "#A2D466" },
+              { range: [{{gaugeVal | tojson}}, {{gaugeVal | tojson}}+1], color: "#000000" },
+              // { range: [0, 50], color: "#000000" },
+              { range: [0, 50], color: "#F2B450" },
+              { range: [50, 90], color: "#F0880A" },
+              { range: [90, 100], color: "#F01313" }
+            ],
+            threshold: {
+              line: { color: "red", width: 4 },
+              thickness: 0.75,
+              value: 490
+            }
+          }
+          }
+        ]
+
+        var layout = { width: 800, height: 500, margin: { t: 0, b: 0 } };
+        Plotly.newPlot('myDiv', data, layout);
+
+
+
+
+      </script>
+
+      <script>
+
+
         let myChart = document.getElementById('myChart').getContext('2d');
        
         // Global Options
@@ -475,41 +468,22 @@
               fill: false,
               borderColor: 'rgb(75, 192, 192)',
               tension: 0.1
-            //   // backgroundColor: 'green',
-            //   backgroundColor:'#2ac7db',
-            //   borderWidth:1,
-            //   borderColor:'white',
-            //   hoverBorderWidth: 3,
-            //   hoverBorderColor: 'black'
-            }]
+            },
+            {
+              label:'Pred Price',
+              data:{{values | tojson}},
+       
+              fill: false,
+              borderColor: 'rgb(0, 0, 0)',
+              tension: 0.1
+
+            },
+        
+        ]
           },
-        //   options:{
-        //     title:{
-        //       display: true,
-        //       text: 'Close vs Time',
-        //       fontSize:25
-        //     },
-        //     legend:{
-        //       display:true,
-        //       position:'right',
-        //       labels:{
-        //         fontColor: '#000'
-        //       }
-        //     },
-        //     layout:{
-        //       padding:{
-        //         left:50,
-        //         right:0,
-        //         bottom:0,
-        //         top:0
-        //       }
-        //     },
-        //     tooltips:{
-        //       enabled:true
-        //     }
-        //   }
+        
         });
-       </script>
+      </script>
 
 
 

@@ -45,25 +45,3 @@ def calculate_MACD(data):
     for i in range(len(ema1)):
         what.append(ema1[i] - ema2[i])
     return what
-
-
-
-# u = [sum(x)/2 for x in zip(ma, ema)]
-# Kr = 0.3
-# Kp = 0.9
-# custom = list()
-
-# for i in range(len(u)):
-#   P = data['Close'][i]
-#   if (P > u[i]*(1 - Kr)) and (P < u[i]*(1 + Kr)):
-
-#     x = ((P - u[i])*Kp*100)/(u[i]*Kr)
-
-#   elif (P < u[i]*(1 - Kr)):
-
-#     x = (P*(1 - Kp)/(u[i]*(1 - Kr)) - 1)*100
-
-#   else:
-    
-#     x = (1 - (u[i]*(1 + Kr)*(1 - Kp))/P)*100
-#   custom.append(x)
