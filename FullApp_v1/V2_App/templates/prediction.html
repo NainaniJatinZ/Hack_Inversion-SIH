@@ -481,10 +481,11 @@
        
               fill: false,
               borderColor: 'rgb(0, 255, 0)',
-              tension: 0.1
+              tension: 0.1,
+              
             },
             {
-              label:'Old',
+              label:'Forecasted Price',
               data:{{LSTMy | tojson}},
        
               fill: false,
@@ -521,7 +522,7 @@
         tension: 0.1
       },
       {
-        label:'Closing Price',
+        label:'Forecasted Price',
         data:{{threeModely | tojson}},
  
         fill: false,
@@ -556,7 +557,7 @@
         tension: 0.1
       },
       {
-        label:'Closing Price',
+        label:'Forecasted Price',
         data:{{SVRy | tojson}},
  
         fill: false,

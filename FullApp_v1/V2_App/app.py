@@ -270,7 +270,8 @@ def models():
         data = create_indicators(data)
         train, test, data = train_test(data)
 
-        best = 'None'
+        bgColors = ['white','white','white']
+        # best = 0
 
         MAE_lstm,MAE_stat,MAE_svm, mapeLSTM, mapestat, mapesvr = getMAE(train,test,data)
         LSTM = [round(mapeLSTM, 2)] + LSTM 
@@ -283,13 +284,14 @@ def models():
         SVR = [round(MAE_svm, 2)] + SVR 
 
         if MAE_lstm < MAE_svm and MAE_lstm < MAE_stat:
-            best = "LSTM is the recommended model"
+            bgColors[0] = '#40db5a'
         elif MAE_svm < MAE_lstm and MAE_svm < MAE_stat:
-            best = "Stat is the recommended model"
+            bgColors[1] = '#40db5a'
         elif MAE_stat < MAE_lstm and MAE_stat < MAE_svm:
-            best = "SVR is the recommened  model"
+            bgColors[2] = '#40db5a'
 
-    return render_template("models.html",LSTM = LSTM, threeModels= threeModels, SVR = SVR, best = best)
+
+    return render_template("models.html",LSTM = LSTM, threeModels= threeModels, SVR = SVR,bgColors=bgColors)
 
 
 @app.route('/upload_static_file', methods=['POST'])
